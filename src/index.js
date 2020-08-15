@@ -1,12 +1,15 @@
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix } = require('../config.json');
 const ytdl = require('ytdl-core');
+
+const queue = new Map();
 
 require('dotenv').config();
 
 const client = new Discord.Client();
+
 const guildID = '122486807869915146';
-const channelID = '258392309282897921';
+//const channelID = '258392309282897921';
 
 client.once('ready', () => {
   console.log('Bot is ready!');
@@ -14,86 +17,100 @@ client.once('ready', () => {
 
 //&& msg.channel.id === channelID adiciona a condição de channels
 try {
-  client.on('msg', async (msg) => {
+  client.on('message', async (msg) => {
     if (msg.guild.id === guildID) {
       if (msg.content.toLowerCase() === 'ricardo') {
-        await msg.channel.send('gay');
+        await msg.channel.send('é gay');
       }
     }
   });
 } catch (err) {
   next(err);
 }
+client.on('message', async (message) => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
 
-client.on('msg', async (msg) => {
-  if (msg.author.bot) return;
-  if (!msg.content.startsWith(prefix)) return;
+  const serverQueue = queue.get(message.guild.id);
+
+  if (message.content.startsWith(`${prefix}tocaumapramim`)) {
+    execute(message, serverQueue);
+    return;
+  } else if (message.content.startsWith(`${prefix}skip`)) {
+    skip(message, serverQueue);
+    return;
+  } else if (message.content.startsWith(`${prefix}stop`)) {
+    stop(message, serverQueue);
+    return;
+  } else {
+    message.channel.send('O certo é $tocaumapramim! + url do youtube');
+  }
 });
 
-const serverQueue = queue.get(msg.guild.id);
+async function execute(message, serverQueue) {
+  const args = message.content.split(' ');
 
-if (msg.content.startsWith(`${prefix}play`)) {
-  execute(msg, serverQueue);
-  return;
-} else if (msg.content.startsWith(`${prefix}skip`)) {
-  skip(msg, serverQueue);
-  return;
-} else if (msg.content.startsWith(`${prefix}stop`)) {
-  stop(msg, serverQueue);
-  return;
-} else {
-  msg.channel.send('Não tem esse comando não');
-}
-
-const queue = new Map();
-async function execute(msg, serverQueue) {
-  const args = msg.content.split(' ');
-
-  const voiceChannel = msg.member.voice.channel;
-  if (!voiceChannel) return msg.channel.send('Cê tem que tá num chat de voz');
-  const permissions = voiceChannel.permissionsFor(msg.client.user);
+  const voiceChannel = message.member.voice.channel;
+  if (!voiceChannel)
+    return message.channel.send(
+      'Você tem que estar em um chat de voz para tocar músicas'
+    );
+  const permissions = voiceChannel.permissionsFor(message.client.user);
   if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-    return msg.channel.send('dá permissão ae');
+    return message.channel.send('Preciso de permissões para tocar música');
+  }
+
+  const songInfo = await ytdl.getInfo(args[1]);
+  const song = {
+    title: songInfo.videoDetails.title,
+    url: songInfo.videoDetails.video_url,
+  };
+
+  if (!serverQueue) {
+    const queueContruct = {
+      textChannel: message.channel,
+      voiceChannel: voiceChannel,
+      connection: null,
+      songs: [],
+      volume: 5,
+      playing: true,
+    };
+
+    queue.set(message.guild.id, queueContruct);
+
+    queueContruct.songs.push(song);
+
+    try {
+      var connection = await voiceChannel.join();
+      queueContruct.connection = connection;
+      play(message.guild, queueContruct.songs[0]);
+    } catch (err) {
+      console.log(err);
+      queue.delete(message.guild.id);
+      return message.channel.send(err);
+    }
+  } else {
+    serverQueue.songs.push(song);
+    return message.channel.send(`${song.title} foi adicionada a fila`);
   }
 }
-const songInfo = await ytdl.getInfo(args[1]);
-const song = {
-  title: songInfo.title,
-  url: songInfo.video_url,
-};
 
-if (!serverQueue) {
-} else {
-  serverQueue.songs.push(song);
-  console.log(serverQueue.songs);
-  return message.channel.send(`${song.title} ta na fila`);
+function skip(message, serverQueue) {
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      'Você tem que estar em um chat de voz para parar uma música!'
+    );
+  if (!serverQueue) return message.channel.send('Não tem música para pular!');
+  serverQueue.connection.dispatcher.end();
 }
 
-// Creating the contract for our queue
-const queueContruct = {
-  textChannel: message.channel,
-  voiceChannel: voiceChannel,
-  connection: null,
-  songs: [],
-  volume: 5,
-  playing: true,
-};
-// Setting the queue using our contract
-queue.set(message.guild.id, queueContruct);
-// Pushing the song to our songs array
-queueContruct.songs.push(song);
-
-try {
-  // Here we try to join the voicechat and save our connection into our object.
-  var connection = await voiceChannel.join();
-  queueContruct.connection = connection;
-  // Calling the play function to start a song
-  play(message.guild, queueContruct.songs[0]);
-} catch (err) {
-  // Printing the error message if the bot fails to join the voicechat
-  console.log(err);
-  queue.delete(message.guild.id);
-  return message.channel.send(err);
+function stop(message, serverQueue) {
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      'Você tem que estar em um  chat de voz para parar a música!'
+    );
+  serverQueue.songs = [];
+  serverQueue.connection.dispatcher.end();
 }
 
 function play(guild, song) {
@@ -103,30 +120,16 @@ function play(guild, song) {
     queue.delete(guild.id);
     return;
   }
-}
 
-const dispatcher = serverQueue.connection
-  .play(ytdl(song.url))
-  .on('finish', () => {
-    serverQueue.songs.shift();
-    play(guild, serverQueue.songs[0]);
-  })
-  .on('error', (error) => console.error(error));
-dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-serverQueue.textChannel.send(`Tocando uma: **${song.title}**`);
-
-function skip(message, serverQueue) {
-  if (!message.member.voice.channel)
-    return message.channel.send('Tem que tá no canal de voz, mano');
-  if (!serverQueue) return message.channel.send('Nem tem nada tocando lol');
-  serverQueue.connection.dispatcher.end();
-}
-
-function stop(message, serverQueue) {
-  if (!message.member.voice.channel)
-    return message.channel.send('Tem que tá no canal de voz, mano');
-  serverQueue.songs = [];
-  serverQueue.connection.dispatcher.end();
+  const dispatcher = serverQueue.connection
+    .play(ytdl(song.url))
+    .on('finish', () => {
+      serverQueue.songs.shift();
+      play(guild, serverQueue.songs[0]);
+    })
+    .on('error', (error) => console.error(error));
+  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+  serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
 client.login(process.env.BOT_TOKEN);
