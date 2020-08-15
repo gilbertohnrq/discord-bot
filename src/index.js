@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-require('dotenv').config();
+//require('dotenv').config();
 
 const client = new Discord.Client();
 
@@ -18,4 +18,4 @@ client.on('message', async (msg) => {
   }
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login('NzQzOTg3NDg2ODQxMzcyNzM0.XzcqVw.p40B_vL8JgbqSbZQSY116iwPcIE');
