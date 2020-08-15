@@ -21,4 +21,4 @@ try {
   next(err);
 }
 
-client.login(process.env.BOT_TOKEN);
+client.login(BOT_TOKEN);
