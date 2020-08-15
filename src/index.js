@@ -1,10 +1,9 @@
 const Discord = require('discord.js');
 const { prefix } = require('../config.json');
 const ytdl = require('ytdl-core');
+const queue = new Map();
 
 const commandHandler = require('./commands');
-
-const queue = new Map();
 
 require('dotenv').config();
 
