@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 require('dotenv').config();
-
+//teste
 const client = new Discord.Client();
 
 const guildID = '122486807869915146';
