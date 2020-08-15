@@ -12,6 +12,8 @@
   - https://discordjs.guide/creating-your-bot/#creating-the-bot-file
 - [x] Build a "ping" -> "pong" command
 - [x] Build a "play" command that plays a song from a YouTube link
+- [x] Build a "skip" command that plays a song from a YouTube link
+- [x] Build a "stop" command that plays a song from a YouTube link
 - [ ] Add the YouTube search functionality to the play command
 - [] Refactor to use a command handler
 
