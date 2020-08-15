@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 require('dotenv').config();
-
+const BOT_TOKEN = NzQzOTg3NDg2ODQxMzcyNzM0.XzcqVw.p40B_vL8JgbqSbZQSY116iwPcIE
 const client = new Discord.Client();
 
 const guildID = '122486807869915146';
