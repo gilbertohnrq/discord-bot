@@ -14,12 +14,7 @@ client.once('ready', () => {
   console.log('Bot is ready!');
 });
 
-//&& msg.channel.id === channelID adiciona a condição de channels
-try {
-  client.on('message', commandHandler);
-} catch (err) {
-  next(err);
-}
+client.on('message', commandHandler);
 
 client.on('message', async (message) => {
   if (message.author.bot) return;
