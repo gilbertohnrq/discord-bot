@@ -2,14 +2,13 @@ const Discord = require('discord.js');
 const { prefix } = require('../config.json');
 const ytdl = require('ytdl-core');
 
+const commandHandler = require('./commands');
+
 const queue = new Map();
 
 require('dotenv').config();
 
 const client = new Discord.Client();
-
-const guildID = '122486807869915146';
-//const channelID = '258392309282897921';
 
 client.once('ready', () => {
   console.log('Bot is ready!');
@@ -17,16 +16,11 @@ client.once('ready', () => {
 
 //&& msg.channel.id === channelID adiciona a condição de channels
 try {
-  client.on('message', async (msg) => {
-    if (msg.guild.id === guildID) {
-      if (msg.content.toLowerCase() === 'ricardo') {
-        await msg.channel.send('é gay');
-      }
-    }
-  });
+  client.on('message', commandHandler);
 } catch (err) {
   next(err);
 }
+
 client.on('message', async (message) => {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
