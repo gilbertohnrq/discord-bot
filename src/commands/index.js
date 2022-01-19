@@ -7,7 +7,11 @@ const gilberto = require ('./gilberto');
 
 const commands = {
   ricardo,
-  ygor
+  ygor,
+  loss,
+  lucas,
+  pedro,
+  gilberto
 };
 
 module.exports = async (msg) => {
