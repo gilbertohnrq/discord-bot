@@ -1,7 +1,8 @@
 var textArray = [
     'é bot',
     '0/todos',
-    'nem clicou'
+    'nem clicou',
+    'irmãos cape?e?e?e?e?e?ta'
 ];
 
 module.exports = async (msg) => {
