@@ -1,4 +1,5 @@
 const ricardo = require('./ricardo');
+const ygor = require ('./ygor');
 
 const commands = {
   ricardo,
