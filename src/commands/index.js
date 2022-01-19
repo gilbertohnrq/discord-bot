@@ -11,8 +11,7 @@ module.exports = async (msg) => {
     const args = msg.content.split(' ');
     const command = args.shift();
     if (Object.keys(commands).includes(command)) {
-      var _msg = command;
-      commands[command](_msg, args);
+      commands[command](msg, args);
     }
   }
 };
