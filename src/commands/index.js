@@ -11,7 +11,7 @@ module.exports = async (msg) => {
     const args = msg.content.split(' ');
     const command = args.shift();
     if (Object.keys(commands).includes(command)) {
-      commands[command](msg, args);
+      commands[command](`/tts ${msg}.`, args);
     }
   }
 };
