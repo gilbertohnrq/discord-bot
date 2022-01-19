@@ -11,6 +11,7 @@ module.exports = async (msg) => {
     const args = msg.content.split(' ');
     const command = args.shift();
     if (Object.keys(commands).includes(command)) {
+      msg = command;
       commands[command](msg, args);
     }
   }
