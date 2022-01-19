@@ -5,6 +5,6 @@ var textArray = [
   ];
   
   module.exports = async (msg) => {
-    await msg.channel.send("lucas " + textArray[Math.floor(Math.random()*textArray.length)], {tts: true});
+    await msg.channel.send("LUCAS " + textArray[Math.floor(Math.random()*textArray.length)], {tts: true});
   };
   
