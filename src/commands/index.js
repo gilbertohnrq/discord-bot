@@ -1,5 +1,9 @@
 const ricardo = require('./ricardo');
 const ygor = require ('./ygor');
+const loss = require ('./loss');
+const lucas = require ('./lucas');
+const pedro = require ('./pedro');
+const gilberto = require ('./gilberto');
 
 const commands = {
   ricardo,

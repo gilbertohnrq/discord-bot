@@ -1,6 +1,7 @@
 var textArray = [
     "entra logo ricaaaaaaaaardo",
-    "passou varanda"
+    "passou varanda",
+    "vou ficar com o bebêzinho"
   ];
   
   module.exports = async (msg) => {
