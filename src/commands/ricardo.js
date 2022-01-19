@@ -1,6 +1,7 @@
 var textArray = [
   "é gay",
-  "maconheiro"
+  "maconheiro",
+  'agora eu vou te matar'
 ];
 
 module.exports = async (msg) => {
