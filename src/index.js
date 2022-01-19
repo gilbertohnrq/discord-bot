@@ -6,7 +6,7 @@ require('dotenv').config();
 const client = new Discord.Client();
 
 client.once('ready', () => {
-  console.log('Bot is ready! v8');
+  console.log('Bot is ready! v9');
 });
 
 client.on('message', commandHandler);
