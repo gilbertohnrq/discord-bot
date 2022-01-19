@@ -1,11 +1,11 @@
 var textArray = [
     'é bot',
-    '0/todos',
-    'irmãos cape?e?e?e?e?e?ta'
+    'está 0/todos',
+    'e irmãos cape?e?e?e?e?e?ta'
 ];
 
 module.exports = async (msg) => {
-    await msg.channel.send(textArray[Math.floor(Math.random()*textArray.length)], {tts: true});
+    await msg.channel.send(msg + " " + textArray[Math.floor(Math.random()*textArray.length)], {tts: true});
   };
   
   
