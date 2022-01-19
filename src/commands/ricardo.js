@@ -1,10 +1,8 @@
 var textArray = [
-  'é gay',
-  'maconheiro',
-  '=rage'
+  "é gay",
+  "maconheiro"
 ];
-var randomIndex = Math.floor(Math.random() * textArray.length); 
-var randomText = textArray[randomIndex];
+var randomText = textArray[Math.floor(Math.random()*textArray.length)];
 
 module.exports = async (msg) => {
   await msg.channel.send(randomText);
