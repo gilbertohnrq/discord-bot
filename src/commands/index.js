@@ -2,6 +2,7 @@ const ricardo = require('./ricardo');
 
 const commands = {
   ricardo,
+  ygor
 };
 
 module.exports = async (msg) => {
