@@ -1,7 +1,7 @@
 var textArray = [
-    'é bot',
-    '0/todos',
-    'irmãos cape?e?e?e?e?e?ta'
+    '/tts é bot',
+    '/tts 0/todos',
+    '/tts irmãos cape?e?e?e?e?e?ta'
 ];
 
 module.exports = async (msg) => {
