@@ -1,6 +1,7 @@
 var textArray = [
     "full build AB",
-    "mama range"
+    "mama range",
+    "tá jogando nada"
   ];
   
   module.exports = async (msg) => {
